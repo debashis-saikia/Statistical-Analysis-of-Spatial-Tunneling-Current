@@ -122,4 +122,5 @@ def reduced_chi_square_2d(x, y, z, beta, sigma, model_func, p):
 
     nu = degrees_of_freedom(len(z), p)
 
+
     return chi2 / nu
