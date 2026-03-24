@@ -20,3 +20,12 @@ def compute_ess(samples):
     ess = N / (2 * tau)
 
     return ess
+
+
+
+
+print("\n--- Effective Sample Size (ESS) ---")
+
+for i in range(samples_p.shape[1]):
+    ess = compute_ess(samples_p[:, i])
+    print(f"Parameter b{i}: ESS ≈ {ess:.1f}")
