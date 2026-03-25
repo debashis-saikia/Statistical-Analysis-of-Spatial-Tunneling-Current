@@ -9,23 +9,16 @@ class PoissonRegression2D:
         self.degree = degree
         self.beta_hat = None
 
-    # -----------------------------
-    # Build polynomial design matrix
-    # -----------------------------
     def build_design_matrix(self, x, y):
         terms = []
         for i in range(self.degree + 1):
             for j in range(self.degree + 1 - i):
                 terms.append((x**i) * (y**j))
-        return np.vstack(terms).T  # shape (N, k)
+        return np.vstack(terms).T  
 
-    # -----------------------------
-    # Log-likelihood (stable)
-    # -----------------------------
     def log_likelihood(self, beta, X, z):
         eta = X @ beta
 
-        # prevent overflow
         eta = np.clip(eta, -50, 50)
 
         lam = np.exp(eta)
@@ -36,9 +29,6 @@ class PoissonRegression2D:
 
         return np.sum(z * np.log(lam) - lam - gammaln(z + 1))
 
-    # -----------------------------
-    # Gradient (stable)
-    # -----------------------------
     def gradient(self, beta, X, z):
         eta = X @ beta
         eta = np.clip(eta, -50, 50)
@@ -49,9 +39,6 @@ class PoissonRegression2D:
 
         return -grad  # minimize
 
-    # -----------------------------
-    # Objective
-    # -----------------------------
     def objective(self, beta, X, z):
         val = -self.log_likelihood(beta, X, z)
 
@@ -60,33 +47,25 @@ class PoissonRegression2D:
 
         return val
 
-    # -----------------------------
-    # Fit model
-    # -----------------------------
     def fit(self, x, y, z):
 
-        # ---- sanity checks ----
         if np.any(z < 0):
             raise ValueError("Poisson data must be non-negative")
         if np.any(~np.isfinite(z)):
             raise ValueError("z contains NaN or inf")
 
-        # ---- normalize inputs (CRITICAL) ----
         self.x_mean, self.x_std = x.mean(), x.std()
         self.y_mean, self.y_std = y.mean(), y.std()
 
         x_scaled = (x - self.x_mean) / (self.x_std + 1e-12)
         y_scaled = (y - self.y_mean) / (self.y_std + 1e-12)
 
-        # ---- design matrix ----
         X = self.build_design_matrix(x_scaled, y_scaled)
         N, k = X.shape
 
-        # ---- initialization ----
         beta_init = np.zeros(k)
         beta_init[0] = np.log(np.mean(z) + 1e-6)
 
-        # ---- optimization ----
         result = minimize(
             self.objective,
             beta_init,
@@ -104,16 +83,13 @@ class PoissonRegression2D:
         self.N = N
         self.k = k
 
-        # ---- fitted values ----
         eta = X @ self.beta_hat
         eta = np.clip(eta, -50, 50)
 
         self.lam = np.exp(eta)
 
-        # ---- log-likelihood ----
         self.logL = self.log_likelihood(self.beta_hat, X, z)
 
-        # ---- deviance ----
         z_safe = np.where(z == 0, 1, z)
 
         self.deviance = 2 * np.sum(
@@ -134,9 +110,6 @@ class PoissonRegression2D:
         self.AIC = -2 * self.logL + 2 * k
         self.BIC = -2 * self.logL + k * np.log(N)
 
-    # -----------------------------
-    # Predict
-    # -----------------------------
     def predict(self, x, y):
 
         x_scaled = (x - self.x_mean) / (self.x_std + 1e-12)
@@ -149,9 +122,6 @@ class PoissonRegression2D:
 
         return np.exp(eta)
 
-    # -----------------------------
-    # Summary
-    # -----------------------------
     def summary(self):
 
         print("\nPoisson Regression (2D Polynomial GLM)\n")
