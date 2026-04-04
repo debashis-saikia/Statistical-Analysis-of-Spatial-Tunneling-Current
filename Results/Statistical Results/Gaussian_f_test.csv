@@ -1,4 +1,4 @@
-Comparison,d_small,d_large,RSS_small,RSS_large,Delta_RSS,p_small,p_large,F_stat,p_value,CI_lower,CI_upper,Significant
+Comparison,d_small,d_large,RSS_small,RSS_large,Delta_RSS,parameter_small,parameter_large,F_stat,p_value,CI_lower,CI_upper,Significant
 d0_vs_d1,0,1,943.3574428330201,943.3328459234913,0.024596909528781907,1,3,0.0912,9.1282e-01,0.0247,3.6030,No
 d1_vs_d2,1,2,943.3328459234913,941.006443887683,2.3264020358083144,3,6,5.7636,6.2165e-04,1.8485,80.1309,Yes
 d2_vs_d3,2,3,941.006443887683,940.4461284413775,0.5603154463054807,6,10,1.0412,3.8427e-01,0.3735,8.5981,No
