@@ -1,4 +1,4 @@
-Model_Comparison,Deviance_small,Deviance_large,Delta_Deviance,df_k,p_value,CI_lower,CI_upper,#params_small,#params_large
+Model_Comparison,Deviance_small,Deviance_large,Delta_Deviance,dof/k,p_value,CI_lower,CI_upper,#params_small,#params_large
 0_vs_1,37.075382,37.074412,0.000970,2,9.9952e-01,0.0506,7.3778,1,3
 1_vs_2,37.074412,36.982665,0.091747,3,9.9281e-01,0.2158,9.3484,3,6
 2_vs_3,36.982665,36.960553,0.022112,4,9.9994e-01,0.4844,11.1433,6,10
