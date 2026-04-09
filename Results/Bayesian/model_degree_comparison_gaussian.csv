@@ -1,0 +1,5 @@
+Degree,Stability,Complexity,Conclusion
+Degree 1,High,Low,Best
+Degree 2,Moderate,Moderate,Acceptable
+Degree 3,Low,High,Overfitting
+Degree 4,Low,High,Overfitting
