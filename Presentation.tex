@@ -1,0 +1,1489 @@
+\documentclass[aspectratio=169]{beamer}
+
+% -------------------- Packages --------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+% -------------------- Theme --------------------
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+
+% -------------------- Title Info --------------------
+\title{Model Selection under Competing Noise Assumptions using Spatial Data}
+\author{Debashis Saikia, Debanjan Chatterjee, Deo Mogulmitra}
+
+\institute{
+Indian Institute of Science Education and Research (IISER), Thiruvananthapuram\\
+\vspace{0.3cm}
+\small
+\href{https://github.com/debashis-saikia/Statistical-Analysis-of-Spatial-Tunneling-Current}
+{\textcolor{blue}{GitHub: Statistical-Analysis-of-Spatial-Tunneling-Current}}
+}
+
+\date{}
+
+% -------------------- Document --------------------
+% -------------------- Document --------------------
+\begin{document}
+
+\begin{frame}
+
+\begin{columns}
+
+\column{0.75\textwidth}
+\maketitle
+
+\column{0.25\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{iiserlogo.jpg}
+
+\end{columns}
+
+\end{frame}
+
+% -------------------- Slide --------------------
+\begin{frame}{Introduction}
+
+\textbf{Data}
+\begin{itemize}
+\item Spatial measurements of tunneling current $\mathrm{I}(x,y)$
+\item Observations exhibit significant stochastic variability
+\end{itemize}
+\break
+\vspace{0.3cm}
+
+\textbf{Main Objective}
+\begin{itemize}
+\item Identify the appropriate \textbf{statistical noise model}
+\end{itemize}
+
+\break
+\vspace{0.3cm}
+
+\textbf{Approach (Overview)}
+\begin{itemize}
+\item Model spatial structure and compare competing noise assumptions
+\item Gaussian (continuous) vs Poisson (count-based)
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Modeling Framework}
+
+\textbf{Spatial Structure}
+\begin{itemize}
+
+\item Flexible approximation of unknown spatial structure
+
+\begin{equation}
+    f(x,y) = \beta_0 + \beta_1 x + \beta_2 y + \beta_3 x^2 + \beta_4 xy + \beta_5 y^2 + \cdots  = \sum_{i+j \le d} \beta_{ij}, x^i y^j
+\end{equation}
+
+\item Model complexity controlled via degree $d$
+\end{itemize}
+
+\break
+\vspace{0.1cm}
+
+\textbf{Two Noise Formulations}
+
+\begin{itemize}
+\item \textbf{Gaussian Model (log-space)}
+\begin{equation}
+    z = \log(I) = f(x,y) + \epsilon, \quad \epsilon \sim \mathcal{N}(0,\sigma^2)    
+\end{equation}
+
+
+\break
+\item \textbf{Poisson Model}
+\begin{equation}
+    I \sim \text{Poisson}(\lambda(x,y)), \quad \log \lambda = f(x,y)
+\end{equation}
+
+
+\end{itemize}
+
+\break
+\vspace{0.1cm}
+
+\textbf{Key Idea}
+\begin{itemize}
+\item Same spatial model, different noise assumptions
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Gaussian Model: Formulation and Estimation}
+
+\begin{columns}
+
+% -------- LEFT SIDE --------
+\column{0.55\textwidth}
+
+\textbf{Model Assumption}
+\begin{equation*}
+z_i = \log(I_i) = f(x_i,y_i) + \epsilon_i, 
+\quad \epsilon_i \sim \mathcal{N}(0,\sigma^2)
+\end{equation*}
+\textbf{Likelihood Function}
+\begin{equation*}
+L(\beta,\sigma^2) = \prod_{i=1}^{N}
+\frac{1}{\sqrt{2\pi\sigma^2}}
+\exp\left(-\frac{(z_i - f(x_i,y_i))^2}{2\sigma^2}\right)
+\end{equation*}
+
+\begin{equation*}
+\log L = -\frac{N}{2}\log(2\pi\sigma^2)
+- \frac{1}{2\sigma^2} \sum_{i=1}^{N} (z_i - f(x_i,y_i))^2
+\end{equation*}
+
+
+
+% -------- RIGHT SIDE --------
+\column{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{fig1.png}
+
+
+\end{columns}
+
+\textbf{MLE Estimation}
+\begin{equation*}
+\hat{\beta} = \arg\min_{\beta} \mathrm{RSS}, 
+\quad \mathrm{RSS} = \sum_{i=1}^{N} (z_i - f(x_i,y_i))^2, 
+\quad\hat{\sigma}^2 = \frac{\mathrm{RSS}}{N}
+\end{equation*}
+
+
+
+\end{frame}
+
+
+\begin{frame}{Gaussian Model: Inference and Validation}
+
+\begin{columns}
+
+\column{0.55\textwidth}
+
+\textbf{Parameter Uncertainty}
+\begin{equation*}
+\mathrm{Cov}(\hat{\beta}) = \sigma^2 (X^T X)^{-1}
+\end{equation*}
+
+\begin{equation*}
+t_j = \frac{\hat{\beta}_j}{\mathrm{SE}(\hat{\beta}_j)}
+\end{equation*}
+
+\vspace{0.2cm}
+
+\textbf{Goodness of Fit}
+\begin{equation*}
+\chi^2 = \sum_{i=1}^{N} \frac{(z_i - \hat{z}_i)^2}{\sigma^2}
+\quad
+\chi^2_{\text{red}} = \frac{\chi^2}{N - p}
+\end{equation*}
+
+\vspace{0.2cm}
+
+\column{0.45\textwidth}
+
+\vfill
+\centering
+\includegraphics[width=0.9\textwidth]{fig2.png}
+\vfill
+
+\end{columns}
+
+\textbf{Model Selection}
+\begin{equation*}
+\mathrm{AIC} = N \log\left(\frac{\mathrm{RSS}}{N}\right) + 2k
+\quad
+\mathrm{BIC} = N \log\left(\frac{\mathrm{RSS}}{N}\right) + k \log N
+\end{equation*}
+
+\begin{equation*}
+F = \frac{(\mathrm{RSS}_d - \mathrm{RSS}_{d+1})/k}
+{\mathrm{RSS}_{d+1}/(N - p)}
+\end{equation*}
+
+\end{frame}
+
+
+
+
+
+
+
+
+\begin{frame}{AIC \& BIC (Model Selection)}
+\begin{equation}
+    \text{AIC} = 2k - 2\ln L
+\end{equation}
+\begin{equation}
+    \text{BIC} = k \ln n - 2\ln L
+\end{equation}
+
+\begin{itemize}
+    \item Balance model fit vs.\ complexity
+    \item Lower values indicate a better model; comparisons are made using differences.
+\end{itemize}
+\begin{columns}
+\column{0.48\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.70\linewidth]{Poisson_AIC_BIC_v_deg.png}
+    \caption{ Poisson}
+    \label{fig:placeholder}
+\end{figure}
+\column{0.48\textwidth}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.80\linewidth]{Gaussian_AIC_BIC_v_deg.png}
+     \caption{ Gaussian}
+    \label{fig:placeholder}
+\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Reduced Chi-Square ($\chi^2_\nu$)}
+\begin{columns}
+
+% -------- LEFT SIDE --------
+\column{0.55\textwidth}
+\textbf{Chi-Square}
+\begin{equation*}
+\chi^2 = \sum_{i=1}^{n} \frac{(y_i - y_i^{\text{model}})^2}{\sigma_i^2}
+\end{equation*}
+
+\begin{itemize}
+    \item Measures goodness of fit
+\end{itemize}
+\textbf{Reduced Chi-Square}
+\begin{equation*}
+\chi^2_\nu = \frac{\chi^2}{\nu}, \quad \nu = n - k
+\end{equation*}
+
+\begin{itemize}
+    \item $\nu = n - k$
+    \item $\chi^2_\nu \approx 1$: good \quad $\gg 1$: poor \quad $\ll 1$: overfit
+\end{itemize}
+
+% -------- RIGHT SIDE --------
+\column{0.45\textwidth}
+\centering
+\begin{table}[h]
+\centering
+\begin{tabular}{cc c}
+\hline
+ \textbf{Degree}&\textbf{Gaussian ($\chi^2_\nu$)} & \textbf{Poisson ($\chi^2_\nu$)} \\
+\hline
+ 1&1.000150 & 0.007574 \\
+ 2&1.000300 & 0.007561 \\
+ 3&1.000500 & 0.007500 \\
+ 4&1.000751 & 0.007430 \\
+ 5&1.001051 & 0.007381 \\
+ 6&1.001402 & 0.007287 \\
+\hline
+\end{tabular}
+\caption{Reduced Chi-Square Comparison}
+\end{table}
+\end{columns}
+\end{frame}
+
+\begin{frame}{RSS, Variance and Deviance}
+\begin{columns}
+
+% -------- LEFT SIDE --------
+\column{0.55\textwidth}
+
+\textbf{Gaussian: RSS \& Variance}
+\begin{itemize}
+    \item $\text{RSS} = \sum (y_i - y_i^{\text{model}})^2$ measures total squared error
+    \item Variance: $\sigma^2 \approx \frac{\text{RSS}}{n - k}$ estimates noise level
+    \item Lower RSS / variance $\Rightarrow$ better fit
+\end{itemize}
+\vspace{0.2cm}
+
+\textbf{Poisson: Deviance}
+\begin{itemize}
+    \item Measures goodness of fit relative to a saturated model
+    \item $D = 2 \sum \left[y_i \ln\left(\frac{y_i}{\hat{y}_i}\right) - (y_i - \hat{y}_i)\right]$
+    \item Lower deviance $\Rightarrow$ better fit
+\end{itemize}
+
+% -------- RIGHT SIDE --------
+\column{0.45\textwidth}
+\centering
+
+{\scriptsize
+\setlength{\tabcolsep}{3pt}
+
+% -------- Gaussian Table --------
+\vspace{2pt}
+\begin{tabular}{cc c}
+\hline
+ \textbf{Degree}&\textbf{RSS} & \textbf{Estimated Variance} \\
+\hline
+ 1&3839.0229834969407 & 0.19195114919734704 \\
+ 2&3831.6392756999417 & 0.1915819637849971 \\
+ 3&3798.4263665070243 & 0.18992131832535122 \\
+ 4&3793.248730694795  & 0.18966243653473974 \\
+ 5&615433.6486664154  & 30.77168243332077 \\
+ 6&$3.7029 \times 10^{17}$ & $1.6851 \times 10^{13}$ \\
+\hline
+\end{tabular}
+
+\vspace{8pt}
+
+% -------- Poisson Table --------
+\vspace{2pt}
+
+\begin{tabular}{cc}
+\hline
+ \textbf{Degree}&\textbf{Deviance} \\
+\hline
+ 1&151.116058 \\
+ 2&150.824892 \\
+ 3&149.515301 \\
+ 4&148.069105 \\
+ 5&147.036226 \\
+ 6&145.194669 \\
+\hline
+\end{tabular}
+}
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Statistical Tests}
+\small
+
+\begin{columns}[T]
+
+% ---------- LEFT ----------
+\column{0.48\textwidth}
+
+\textbf{Individual Parameters}
+\vspace{0.1cm}
+\begin{itemize}
+    \item \textbf{T:} $H_0:\beta_i=0$, \quad 
+    $t_i=\frac{\hat{\beta}_i}{\text{SE}(\hat{\beta}_i)}$
+    
+    \item \textbf{Z:} 
+    $z=\frac{\bar{x}-\mu}{\sigma/\sqrt{n}}$
+\end{itemize}
+
+\vspace{0.2cm}
+\textit{Normality assumed}
+
+\vspace{0.4cm}
+
+\textbf{Model Comparison}
+\vspace{0.1cm}
+\begin{itemize}
+    \item \textbf{F:} 
+    $F=\frac{(RSS_d-RSS_{d+1})/k}{RSS_{d+1}/(N-p_{d+1})}$
+    
+    \item \textbf{LRT:} 
+    $\lambda=-2\ln\!\left(\frac{L_0}{L_1}\right)$
+\end{itemize}
+
+\vspace{0.2cm}
+\textit{Large $\Rightarrow$ complex model}
+
+% ---------- RIGHT ----------
+\column{0.52\textwidth}
+\scriptsize
+
+\textbf{Gaussian F-test}
+\vspace{0.1cm}
+
+\begin{tabular}{lcc}
+\toprule
+Comp & p-val & Sig \\
+\midrule
+$d0\_d1$ & $9.13e^{-1}$ & No \\
+$d1\_d2$ & $6.22e^{-4}$ & Yes \\
+$d2\_d3$ & $3.84e^{-1}$ & No \\
+$d3\_d4$ & $1.00$ & No \\
+$d4\_d5$ & $1.00$ & No \\
+$d5\_d6$ & $1.00$ & No \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5cm}
+
+\textbf{Poisson LRT}
+\vspace{0.1cm}
+
+\begin{tabular}{lcc}
+\toprule
+Comp & p-val & CI \\
+\midrule
+$0\_1$ & $9.995e^{-1}$ & [0.05, 7.38] \\
+$1\_2$ & $9.928e^{-1}$ & [0.22, 9.35] \\
+$2\_3$ & $9.999e^{-1}$ & [0.48, 11.14] \\
+$3\_4$ & $9.995e^{-1}$ & [0.83, 12.83] \\
+$4\_5$ & $1.00$ & [1.24, 14.45] \\
+$5\_6$ & $9.999e^{-1}$ & [1.69, 16.01] \\
+\bottomrule
+\end{tabular}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Gaussian t test}
+    \small
+    \textbf{Models retaining only significant parameters:}
+    
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Degree 1:} 
+        $$z = \beta_0$$
+        
+        \vspace{0.15cm}
+        \item \textbf{Degree 2:} 
+        $$z = \beta_0 + \beta_3 x^2 + \beta_5 y^2$$
+        
+        \vspace{0.15cm}
+        \item \textbf{Degree 3:} 
+        $$z = \beta_0$$
+        
+        \vspace{0.15cm}
+        \item \textbf{Degree 4:} 
+        $$z = \beta_0 + \beta_5 y^2 + \beta_6 x^3 + \beta_9 y^3 + \beta_{10} x^{4} + \beta_{12} x^{2}  y^{2}+ \beta_{13} x^{}y^{3} + \beta_{14} y^{4}$$
+        
+        \vspace{0.15cm}
+        \item \textbf{Degree 5:} 
+        $$z = \beta_0 + \beta_6 x^6 + \beta_{11} x^{3} y^{}+ \beta_{15} x^{5} + \beta_{18} x^{2} y^{3}+ \beta_{19} x^{} y^{4}+ \beta_{20} y^{5}$$
+    \end{itemize}
+\end{frame}
+\begin{frame}{Poisson Z test}
+    \small
+    \textbf{Models retaining only significant parameters:}
+    
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Degree 1:} 
+        $$z = \beta_0$$
+        
+        \vspace{0.2cm}
+        \item \textbf{Degree 2:} 
+        $$z = \beta_0 + \beta_5 y^2$$
+        
+        \vspace{0.2cm}
+        \item \textbf{Degree 3:} 
+        $$z = \beta_0 + \beta_9 y^3$$
+        
+        \vspace{0.2cm}
+        \item \textbf{Degree 4:} 
+        $$z = \beta_0 + \beta_{12} x^{2} y^{2}+ \beta_{13} x^{} y^{3}+ \beta_{14} y^{4}$$
+    \end{itemize}
+    
+\end{frame}
+
+
+
+\begin{frame}{Gaussian: Statistical Test Diagnostics}
+
+\centering
+
+% -------- FIRST ROW --------
+\begin{columns}[T]
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.65\linewidth]{Gaussian_model_complexity_v_significant_params.png}\\
+{\scriptsize Number of statistically significant parameters vs model complexity.}
+
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.65\linewidth]{Gaussian_f_test_stat_across_model_comparison.png}\\
+{\scriptsize F-test statistics across successive model comparisons.}
+
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.65\linewidth]{Gaussian_f_test_p_vals.png}\\
+{\scriptsize Corresponding F-test p-values across model transitions.}
+\end{columns}
+
+\vspace{0.4cm}
+
+% -------- SECOND ROW --------
+\begin{columns}[T]
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.65\linewidth]{Gaussian_delta_RSS_v_model_transition.png}\\
+{\scriptsize Change in residual sum of squares (RSS) during model transitions.}
+
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.65\linewidth]{Gaussian_ci_width_v_model_complexity.png}\\
+{\scriptsize Confidence interval width as a function of model complexity.}
+
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.65\linewidth]{Gaussian_RSS_v_model_complexity.png}\\
+{\scriptsize Residual sum of squares (RSS) vs model complexity.}
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}{Poisson: Statistical Test Diagnostics}
+
+\centering
+
+% -------- FIRST ROW --------
+\begin{columns}[T]
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.65\linewidth]{Poisson_z_test_confidence_interval_width_vs_model_complexity.png}\\
+{\scriptsize Z-test confidence interval width vs model complexity.}
+
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.5\linewidth]{Poisson_significance_ratio_vs_model_complexity.png}\\
+{\scriptsize Significance ratio vs model complexity.}
+
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.5\linewidth]{Poisson_deviance_vs_model_complexity.png}\\
+{\scriptsize Deviance vs model complexity.}
+\end{columns}
+
+\vspace{0.4cm}
+
+% -------- SECOND ROW --------
+\begin{columns}[T]
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.5\linewidth]{Poisson_Model_complexity_vs_significant_parameters.png}\\
+{\scriptsize Number of statistically significant parameters vs model complexity.}
+
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.5\linewidth]{Poisson_Confidence_interval_width_vs_model_complexity.png}\\
+{\scriptsize Confidence interval width vs model complexity.}
+
+\column{0.33\textwidth}
+\centering
+\includegraphics[width=0.5\linewidth]{Poisson_Change_in_deviance_across_model_degrees.png}\\
+{\scriptsize Change in deviance across model degrees.}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Residual Analysis}
+\textbf{Q-Q plot}
+\begin{itemize}
+    \item  compares empirical quantiles with theoretical normal quantiles. 
+\end{itemize}
+
+\begin{columns}[c]
+
+\column{0.33\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{Gaussian_qq_d2.png}
+    \caption{Gaussian deg 2}
+    \label{fig:placeholder}
+\end{figure}
+
+
+\column{0.33\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{Gaussian_qq_d4.png}
+    \caption{Gaussian deg 4}
+    \label{fig:placeholder}
+\end{figure}
+
+\end{columns}
+
+
+
+
+
+
+\textbf{Residual Plot (Residual Map)}
+\begin{itemize}
+    \item Plots residuals vs fitted values or predictors
+    \item Random scatter $\Rightarrow$ good model fit
+    \item Patterns $\Rightarrow$ model misspecification
+\end{itemize}
+
+
+\end{frame}
+\begin{frame}{Residual Analysis}
+\begin{columns}
+
+\column{0.33\textwidth}
+\textbf{Residual Histogram}
+\begin{itemize}
+    \item Shows distribution of residuals
+    \item Symmetric, bell-shaped : normality
+    \item Skewness/outliers : model issues
+\end{itemize}
+\column{0.33\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{Gaussian_res_hist_d2.png}
+    \caption{Gaussian  deg 2}
+    \label{fig:placeholder}
+\end{figure}
+\column{0.33\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{Gaussian_res_hist_d4.png}
+    \caption{Gaussian deg 4}
+    \label{fig:placeholder}
+\end{figure}
+\end{columns}
+\begin{columns}
+\column{0.33\textwidth}
+\textbf{Homoscedasticity}
+\begin{itemize}
+    \item Constant variance of residuals: $\mathrm{Var}(\varepsilon_i) = \sigma^2$
+    \item Equal spread : assumption holds
+    \item Funnel shape : heteroscedasticity
+\end{itemize}
+\column{0.33\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{gaussian_hom_d2.png}
+    \caption{Gaussian deg 2}
+    \label{fig:placeholder}
+\end{figure}
+
+\column{0.33\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{gaussian_hom_d4.png}
+    \caption{Gaussian deg 4}
+    \label{fig:placeholder}
+\end{figure}
+
+\end{columns}
+
+
+
+
+\end{frame}
+
+
+
+% =====================================================
+% =====================================================
+\section{Bayesian Analysis}
+% =====================================================
+
+\begin{frame}{Bayesian Analysis}
+
+\textbf{Bayesian Procedure}
+
+\begin{itemize}
+
+\item Select model
+
+\item Define prior distributions
+
+\item Compute posterior distribution
+
+\item Extract credible intervals/regions
+
+\item Perform model comparison
+
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Advantages}
+
+\begin{itemize}
+
+\item Full uncertainty quantification
+
+\item Parameter correlations
+
+\item Model comparison using Bayes factor
+
+\end{itemize}
+
+\end{frame}
+
+% ================================================
+
+
+\section{Bayesian Analysis (using emcee)}
+
+\begin{frame}{Bayesian MCMC Workflow}
+
+\centering
+\includegraphics[
+width=\textwidth,
+height=\textheight,
+keepaspectratio,
+trim=0.5cm 1cm 0.5cm 1cm,
+clip
+]{Bayesian_MCMC_Workflow.pdf}
+
+\end{frame}
+%===============================
+
+
+
+
+
+\section{Gaussian Model Results}
+
+\subsection{Degree 1}
+
+\begin{frame}{Gaussian Model — Degree 1}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[width=0.7\linewidth]
+{gaussian_posterior_distribution(degree 1).png}
+
+\vspace{0.05cm}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+\includegraphics[width=0.3\linewidth]
+{gaussian_posterior_scatter(degree 1).png}
+
+\end{columns}
+
+\column{0.40\textwidth}
+
+\scriptsize
+
+\textbf{Interpretation}
+
+\begin{itemize}
+
+\item Compact posterior
+
+\item Weak correlations
+
+\item Stable inference
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Best model
+
+\item No overfitting
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+% =====================================================
+
+\subsection{Degree 2}
+
+\begin{frame}{Gaussian Model — Degree 2}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[width=0.7\linewidth]
+{gaussian_posterior_distribution(degree 2).png}
+
+\vspace{0.05cm}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+\includegraphics[width=0.3\linewidth]
+{gaussian_posterior_scatter(degree 2).png}
+
+\end{columns}
+
+\column{0.40\textwidth}
+
+\scriptsize
+
+\textbf{Interpretation}
+
+\begin{itemize}
+
+\item Slightly broader posterior
+
+\item Mild correlations
+
+\item Increased uncertainty
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Acceptable model
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+% =====================================================
+
+\subsection{Degree 3}
+
+\begin{frame}{Gaussian Model — Degree 3}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[width=0.7\linewidth]
+{gaussian_posterior_distribution(degree 3).png}
+
+\vspace{0.05cm}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+\includegraphics[width=0.3\linewidth]
+{gaussian_posterior_scatter(degree 3).png}
+
+\end{columns}
+
+\column{0.40\textwidth}
+
+\scriptsize
+
+\textbf{Interpretation}
+
+\begin{itemize}
+
+\item Wider distributions
+
+\item Strong correlations
+
+\item Overfitting begins
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Model unstable
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+% =====================================================
+\subsection{Degree 4}
+
+\begin{frame}{Gaussian Model — Degree 4}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[width=0.7\linewidth]
+{gaussian_posterior_distribution(degree 4).png}
+
+\vspace{0.05cm}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+\includegraphics[width=0.3\linewidth]
+{gaussian_posterior_scatter(degree 4).png}
+
+\end{columns}
+
+\column{0.40\textwidth}
+
+\scriptsize
+
+\textbf{Interpretation}
+
+\begin{itemize}
+
+\item Very wide posterior
+
+\item Strong degeneracy
+
+\item Multi-modal behaviour
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Strong overfitting
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+% =====================================================
+\section{Poisson Model Results}
+% =====================================================
+
+\subsection{Degree 1}
+
+\begin{frame}{Poisson Model — Degree 1}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[width=0.65\textheight]
+{poisson_posterior_distribution(degree 1).png}
+
+\vspace{0.05cm}
+
+\begin{columns}
+
+\column{0.4\textwidth}
+\includegraphics[width=0.3\textheight]
+{poisson_posterior_scatter(degree 1).png}
+
+\end{columns}
+
+\column{0.40\textwidth}
+
+\footnotesize
+
+\textbf{Interpretation}
+
+\begin{itemize}
+
+\item Stable posterior
+
+\item Small uncertainty
+
+\item Good parameter constraints
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Stable inference
+
+\item Well-constrained parameters
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+%---------------------------------
+
+\begin{frame}{Poisson Model — Degree 1 Trace}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[width=\textheight]
+{poisson_trace_plots(degree 1).png}
+
+\column{0.40\textwidth}
+
+\footnotesize
+
+\textbf{Trace Plot Interpretation}
+
+\begin{itemize}
+
+\item Good mixing
+
+\item No drift
+
+\item Chains stationary
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Good convergence
+
+\item Best model
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+% =====================================================
+
+\subsection{Degree 2}
+
+\begin{frame}{Poisson Model — Degree 2}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[width=0.55\textheight]
+{poisson_posterior_distribution(degree 2).png}
+
+\vspace{0.05cm}
+
+\begin{columns}
+
+\column{0.4\textwidth}
+\includegraphics[width=0.3\textheight]
+{poisson_posterior_scatter(degree 2).png}
+
+\end{columns}
+
+\column{0.40\textwidth}
+
+\footnotesize
+
+\textbf{Interpretation}
+
+\begin{itemize}
+
+\item Slightly broader posterior
+
+\item Mild correlations
+
+\item Increased uncertainty
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Acceptable model
+
+\item Moderate complexity
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+%---------------------------------
+
+\begin{frame}{Poisson Model — Degree 2 Trace}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[height=0.8\textheight]
+{poisson_trace_plots(degree 2).png}
+
+\column{0.40\textwidth}
+
+\footnotesize
+
+\textbf{Trace Plot Interpretation}
+
+\begin{itemize}
+
+\item Good mixing
+
+\item Slight drift
+
+\item Stable convergence
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Good convergence
+
+\item Acceptable model
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+% =====================================================
+
+\subsection{Degree 3}
+
+\begin{frame}{Poisson Model — Degree 3}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[width=0.55\textheight]
+{poisson_posterior_distribution_(degree 3).png}
+
+\vspace{0.05cm}
+
+\begin{columns}
+
+\column{0.4\textwidth}
+\includegraphics[height=0.3\textheight]
+{poisson_posterior_scatter(degree 3).png}
+
+\end{columns}
+
+\column{0.40\textwidth}
+
+\footnotesize
+
+\textbf{Interpretation}
+
+\begin{itemize}
+
+\item Wide posterior distributions
+
+\item Strong correlations
+
+\item Parameter degeneracy
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Overfitting begins
+
+\item Increased uncertainty
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+
+%---------------------------------
+
+\begin{frame}{Poisson Model — Degree 3 Trace}
+
+\begin{columns}
+
+\column{0.60\textwidth}
+
+\includegraphics[height=0.85\textheight]
+{poisson_trace_plots(degree 3).png}
+
+\column{0.40\textwidth}
+
+\footnotesize
+
+\textbf{Trace Plot Interpretation}
+
+\begin{itemize}
+
+\item Poor mixing
+
+\item Large fluctuations
+
+\item Non-stationary chains
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Conclusion}
+
+\begin{itemize}
+
+\item Poor convergence
+
+\item Reject model
+
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+% =====================================================
+% =====================================================
+\section{Bayesian Model Comparison}
+%-------------------------------
+
+\begin{frame}{Bayes Factor}
+
+\footnotesize
+
+\textbf{Bayes Factor Definition}
+
+\begin{itemize}
+
+\item The Bayes factor compares two competing models
+
+\item It is the ratio of marginal likelihoods
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\begin{equation}
+K = \frac{P(D|M_1)}{P(D|M_2)}
+\end{equation}
+
+\vspace{0.2cm}
+
+\textbf{Marginal Likelihood}
+
+\begin{equation}
+P(D|M) = \int P(D|\theta, M)\, P(\theta|M)\, d\theta
+\end{equation}
+
+\vspace{0.2cm}
+
+\textbf{Interpretation}
+
+\begin{itemize}
+
+\item $K > 1$ : Model $M_1$ preferred
+
+\item $K < 1$ : Model $M_2$ preferred
+
+\item Larger $K$ indicates stronger evidence
+
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}{Bayes Factor Approximation}
+
+\footnotesize
+
+\textbf{Monte Carlo Approximation}
+
+\begin{equation}
+P(D|M) \approx \frac{1}{N}\sum_{i=1}^{N} P(D|\theta_i , M)
+\end{equation}
+
+\vspace{0.2cm}
+
+\textbf{Log Bayes Factor}
+
+\begin{equation}
+\log B = \log P(D|M_1) - \log P(D|M_2)
+\end{equation}
+
+\vspace{0.3cm}
+
+\textbf{Note}
+
+\begin{itemize}
+
+\item Bayes factor was approximated using posterior samples
+
+\item Monte Carlo estimation of marginal likelihoods
+
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Bayes Factor}
+
+\footnotesize
+
+\textbf{Bayes Factor Definition (Used in This Work)}
+
+\[
+\log B = \log L_g - \log L_p
+\]
+
+\begin{itemize}
+
+\item $\log L_g$ : Gaussian model marginal likelihood
+
+\item $\log L_p$ : Poisson model marginal likelihood
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Approximation Method}
+
+\begin{itemize}
+
+\item Bayes factor computed using marginal likelihoods
+
+\item Monte Carlo approximation using posterior samples
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Computed Values}
+
+\begin{itemize}
+
+\item Log Bayes Factor = 2.8
+
+\item Bayes Factor = 16.4
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{Limitations of Bayes Factor}
+
+\footnotesize
+
+\textbf{Numerical Stability}
+
+\begin{itemize}
+
+\item Bayes factor computed using marginal likelihoods
+
+\item Marginal likelihood estimated using MCMC posterior samples
+
+\item This estimation can be numerically unstable
+
+\item Results may depend on sampling quality
+
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Advanced Bayesian Model Comparison}
+
+\begin{itemize}
+
+\item Widely Applicable Information Criterion (WAIC)
+
+\item Leave-One-Out Cross Validation (LOO)
+
+\item These methods are more stable and robust
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{In This Work}
+
+\begin{itemize}
+
+\item Bayes factor used as an approximate comparison
+
+\item Final interpretation supported by posterior diagnostics and AIC/BIC
+
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}{Final Model Selection}
+
+\footnotesize
+
+\textbf{Interpretation}
+
+\begin{itemize}
+
+\item $\log B > 0$ → (according to \textbf{Jeffery's scale}) Gaussian preferred
+
+\item Moderate to strong evidence
+
+\item Gaussian $\approx 16$ times more probable
+
+\item Lower-degree polynomial favored
+
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Final Model}
+
+\begin{itemize}
+
+\item Gaussian noise model
+
+\item Degree 1 polynomial
+
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\centering
+
+{\Huge \textcolor{blue}{\textbf{Thank You}}}
+
+\end{frame}
+
+
+\end{document}
