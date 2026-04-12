@@ -8,7 +8,7 @@ The Gaussian model assumes that the noise in the data follows a normal distribut
 
 The model provides a good fit to the **log-transformed current**, and the posterior distributions show well-behaved parameter estimates with reasonable uncertainty.
 
-However, the Gaussian assumption implies **constant variance**, which may not accurately reflect the statistical nature of STM data.
+The Gaussian assumption of **constant variance** is suitable when the transformed data exhibits approximately uniform fluctuations, making the Gaussian model statistically consistent for the analyzed dataset.
 
 ---
 
@@ -18,27 +18,27 @@ The Poisson model directly describes the **count-based nature of the current**, 
 
 Unlike the Gaussian model, the Poisson model does not require an explicit noise parameter, as the noise is inherently determined by the signal.
 
-This makes the Poisson model **physically more appropriate** for STM data, where fluctuations arise from discrete tunneling events.
+However, for the present dataset, the Poisson model shows **larger uncertainty**, poorer convergence for higher polynomial degrees, and less stable posterior distributions compared to the Gaussian model.
 
 ---
 
 ## Bayes Factor Comparison
 
-The model comparison was performed using the Bayes factor, computed from the average log-likelihood over posterior samples.
+The model comparison was performed using the Bayes factor, computed from the marginal likelihood estimated using posterior samples.
 
 * **Log Bayes Factor**:
 
 $$
-\log B = -251358
+\log B = 2.8
 $$
 
 * **Bayes Factor**:
 
 $$
-B \approx 0
+B = 16.4
 $$
 
-Due to numerical underflow, the Bayes factor evaluates to zero. However, the extremely large negative value of the log Bayes factor indicates **overwhelming evidence in favor of the Poisson model**.
+This indicates that the **Gaussian model is preferred over the Poisson model**.
 
 ---
 
@@ -46,26 +46,30 @@ Due to numerical underflow, the Bayes factor evaluates to zero. However, the ext
 
 According to Jeffreys’ scale:
 
-* $|\log B| \gg 10$ indicates **decisive evidence**
+* $|\log B| > 1$ → Substantial evidence  
+* $|\log B| > 2.5$ → Strong evidence  
+* $|\log B| > 5$ → Decisive evidence  
 
 In this case:
 
-* $\log B = -251358$ → **extremely strong evidence for the Poisson model**
+* $\log B = 2.8$ → **Strong evidence for the Gaussian model**
+
+Thus, the Gaussian model is **statistically favored** over the Poisson model.
 
 ---
 
 ## Final Conclusion
 
-> The Bayesian analysis strongly favors the **Poisson model** over the Gaussian model.
+> The Bayesian analysis favors the **Gaussian model** over the Poisson model.
 >
-> While the Gaussian model provides a reasonable fit to the log-transformed data, it assumes constant variance and does not capture the underlying count-based noise structure.
+> The Gaussian model provides stable posterior distributions, well-behaved parameter estimates, and better convergence properties.
 >
-> In contrast, the Poisson model directly incorporates the signal-dependent variance inherent in STM measurements, leading to a more physically meaningful and statistically consistent description of the data.
+> Although the Poisson model is physically motivated for count-based data, the Bayesian evidence suggests that the Gaussian model provides a **better statistical description** of the observed dataset.
 >
-> The extremely large magnitude of the log Bayes factor confirms that the Poisson model provides a **decisively better explanation** of the observed data.
+> The positive log Bayes factor confirms that the Gaussian model provides a **stronger explanation** of the observed data.
 
 ---
 
 ## One-line Conclusion
 
-> *“The Bayesian comparison shows overwhelming evidence in favor of the Poisson model, as it correctly captures the count-based noise structure of STM data.”*
+> *“The Bayesian comparison shows strong evidence in favor of the Gaussian model, indicating that Gaussian noise provides a better statistical description of the spatial tunneling current data.”*
